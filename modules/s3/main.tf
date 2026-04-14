@@ -1,6 +1,4 @@
-#############################################
 # BUCKET S3
-#############################################
 
 resource "aws_s3_bucket" "bucket" {
   bucket = "${lower(var.project_name)}-bucket-${random_id.suffix.hex}"
@@ -10,10 +8,7 @@ resource "aws_s3_bucket" "bucket" {
   }
 }
 
-#############################################
 # RANDOM PARA NOME ÚNICO
-#############################################
-
 resource "random_id" "suffix" {
   byte_length = 4
 }

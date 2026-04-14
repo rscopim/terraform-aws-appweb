@@ -1,7 +1,4 @@
-#############################################
 # IAM ROLE PARA EC2
-#############################################
-
 resource "aws_iam_role" "ec2_role" {
   name = "${var.project_name}-EC2-Role"
 
@@ -17,10 +14,7 @@ resource "aws_iam_role" "ec2_role" {
   })
 }
 
-#############################################
 # POLICY PARA S3
-#############################################
-
 resource "aws_iam_policy" "s3_policy" {
   name = "${var.project_name}-S3-Policy"
 
@@ -34,18 +28,14 @@ resource "aws_iam_policy" "s3_policy" {
   })
 }
 
-#############################################
 # ANEXAR POLICY NA ROLE
-#############################################
 
 resource "aws_iam_role_policy_attachment" "attach" {
   role       = aws_iam_role.ec2_role.name
   policy_arn = aws_iam_policy.s3_policy.arn
 }
 
-#############################################
 # INSTANCE PROFILE (EC2 usa isso)
-#############################################
 
 resource "aws_iam_instance_profile" "profile" {
   name = "${var.project_name}-InstanceProfile"

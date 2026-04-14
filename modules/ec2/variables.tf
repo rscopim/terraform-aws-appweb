@@ -1,6 +1,4 @@
-#############################################
 # VARIÁVEIS DO MÓDULO EC2
-#############################################
 
 variable "project_name" {
   description = "Nome do projeto"

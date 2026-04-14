@@ -1,6 +1,4 @@
-#############################################
 # VPC
-#############################################
 
 resource "aws_vpc" "main" {
   cidr_block = var.vpc_cidr
@@ -10,10 +8,7 @@ resource "aws_vpc" "main" {
   }
 }
 
-#############################################
 # INTERNET GATEWAY
-#############################################
-
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
 
@@ -22,9 +17,7 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
-#############################################
 # SUBNETS PÚBLICAS
-#############################################
 
 resource "aws_subnet" "public" {
   count = length(var.public_subnets)
@@ -39,10 +32,7 @@ resource "aws_subnet" "public" {
   }
 }
 
-#############################################
 # SUBNETS PRIVADAS
-#############################################
-
 resource "aws_subnet" "private" {
   count = length(var.private_subnets)
 
@@ -55,10 +45,7 @@ resource "aws_subnet" "private" {
   }
 }
 
-#############################################
 # ROUTE TABLE PÚBLICA
-#############################################
-
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
 
@@ -67,9 +54,7 @@ resource "aws_route_table" "public" {
   }
 }
 
-#############################################
 # ROTA PARA INTERNET
-#############################################
 
 resource "aws_route" "internet" {
   route_table_id         = aws_route_table.public.id
@@ -77,9 +62,7 @@ resource "aws_route" "internet" {
   gateway_id             = aws_internet_gateway.igw.id
 }
 
-#############################################
 # ASSOCIAÇÃO SUBNETS PÚBLICAS
-#############################################
 
 resource "aws_route_table_association" "public" {
   count = length(aws_subnet.public)

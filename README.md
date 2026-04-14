@@ -183,8 +183,3 @@ Este projeto foi desenvolvido como parte de um plano de estudo prático para dom
 * Auto Scaling Group
 * Deploy automatizado
 * Integração com CI/CD
-
----
-
-👨‍💻 Em constante evolução...
-

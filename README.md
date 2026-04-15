@@ -6,132 +6,140 @@ Projeto de infraestrutura como código (IaC) utilizando **Terraform + AWS**, com
 
 ## 🎯 Objetivo
 
-Construir uma infraestrutura completa na AWS utilizando boas práticas de Terraform, incluindo:
+Construir uma arquitetura AWS de forma progressiva, documentada e modular, evoluindo do básico para um cenário mais próximo de produção.
 
-* Rede (VPC)
-* Armazenamento (S3)
-* Controle de acesso (IAM)
-* Computação (EC2)
-* Escalabilidade (em fases futuras)
+Este projeto foi criado com foco em:
+
+* aprendizado prático de Terraform
+* organização profissional de módulos
+* documentação técnica da evolução da arquitetura
+* construção de portfólio para GitHub
 
 ---
 
-## 🏗️ Arquitetura (Atual)
+## 🏗️ Arquitetura atual
 
-* VPC com subnets públicas e privadas (Multi-AZ)
+Atualmente, a arquitetura é composta por:
+
+* VPC
+* Subnets públicas e privadas
 * Internet Gateway
-* Bucket S3 com nome único
-* IAM Role com acesso ao S3
-* EC2 com servidor web (Apache)
-* Integração EC2 → S3 via IAM
+* S3
+* IAM
+* Application Load Balancer (ALB)
+* Security Group separado para a aplicação
+* Auto Scaling Group
+
+Fluxo principal:
+
+```text
+Internet → ALB → Target Group → Auto Scaling Group → EC2 → Aplicação
+```
 
 ---
 
-## 📁 Estrutura do Projeto
+## 📁 Estrutura do projeto
 
 ```text
 .
 ├── modules/
-│   ├── vpc/
-│   ├── s3/
+│   ├── alb/
+│   ├── autoscaling/
 │   ├── iam/
-│   └── ec2/
+│   ├── s3/
+│   ├── security-group/
+│   └── vpc/
 │
 ├── docs/
-│   ├── vpc/
-│   ├── s3/
+│   ├── architecture/
+│   ├── alb/
+│   ├── autoscaling/
+│   ├── ec2/
 │   ├── iam/
-│   └── ec2/
+│   ├── s3/
+│   ├── security-group/
+│   └── vpc/
+│
+├── examples/
+│   └── ec2-standalone/
 │
 ├── main.tf
 ├── variables.tf
 ├── outputs.tf
 ├── README.md
-└── .gitignore
+├── .gitignore
+└── .terraform.lock.hcl
 ```
 
 ---
 
-## 📅 Progresso do Projeto
+## 📅 Progresso do projeto
 
-* [x] Fase 1 — VPC (rede base)
-* [x] Fase 2 — S3 + IAM (armazenamento e permissões)
-* [x] Fase 3 — EC2 (servidor web com integração ao S3)
-* [ ] Fase 4 — Load Balancer (ALB)
-* [ ] Fase 5 — Auto Scaling
-* [ ] Fase 6 — Arquitetura completa
+* [x] Fase 1 — VPC
+* [x] Fase 2 — S3
+* [x] Fase 2 — IAM
+* [x] Fase 3 — EC2
+* [x] Fase 4 — Application Load Balancer (ALB)
+* [x] Fase 5 — Auto Scaling Group
+* [x] Fase 5 — Security Group separado da aplicação
+* [ ] Fase 6 — NAT Gateway e instâncias privadas
+* [ ] Fase 7 — Aplicação web de apresentação
+* [ ] Fase 8 — RDS
+* [ ] Fase 9 — Lambda
+* [ ] Fase 10 — Arquitetura completa
 
 ---
 
 ## ⚙️ Pré-requisitos
 
-Antes de executar o projeto, é necessário:
+Antes de executar o projeto, é necessário ter:
 
 * Terraform instalado
 * AWS CLI configurado
 * Conta AWS ativa
+* Permissões adequadas para criação dos recursos
 
 ---
 
-## 🚀 Como executar
+## 🚀 Comandos principais do Terraform
 
-### 1. Inicializar o projeto
+### Inicializar o projeto
 
 ```bash
 terraform init
 ```
 
----
-
-### 2. Validar o código
+### Validar a configuração
 
 ```bash
 terraform validate
 ```
 
----
+### Formatar os arquivos
 
-### 3. Ver o plano de execução
+```bash
+terraform fmt
+```
+
+### Visualizar o plano
 
 ```bash
 terraform plan
 ```
 
----
-
-### 4. Criar a infraestrutura
+### Aplicar a infraestrutura
 
 ```bash
 terraform apply
 ```
 
----
-
-### 5. Ver outputs
+### Ver os outputs
 
 ```bash
 terraform output
 ```
 
----
-
-### 6. Acessar a aplicação
-
-Após o `apply`, copie o IP público da EC2:
-
-```bash
-terraform output ec2_public_ip
-```
-
-E acesse no navegador:
-
-```text
-http://SEU_IP_PUBLICO
-```
-
----
-
-### 7. Destruir a infraestrutura (evitar custos)
+### Destruir toda a infraestrutura
 
 ```bash
 terraform destroy
@@ -139,47 +147,118 @@ terraform destroy
 
 ---
 
-## 🧠 Conceitos aplicados
+## 💣 Destruição seletiva de recursos
 
-* Infraestrutura como código (IaC)
-* Modularização com Terraform
-* Uso de variáveis e outputs
-* Data sources (AMI dinâmica)
-* IAM Roles e Policies
-* Integração segura entre serviços AWS
+Para fins de estudo e controle de custo, alguns recursos podem ser destruídos de forma seletiva.
+
+### Destruir apenas o ALB
+
+```bash
+terraform destroy -target="module.alb"
+```
+
+### Destruir apenas o Auto Scaling Group
+
+```bash
+terraform destroy -target="module.autoscaling"
+```
+
+### Destruir apenas a EC2 standalone (quando aplicável)
+
+```bash
+terraform destroy -target="module.ec2"
+```
+
+> ⚠️ O uso de `-target` deve ser feito com cautela, pois pode gerar inconsistência temporária na infraestrutura. Após esse uso, é recomendado executar `terraform plan` para verificar se há mudanças pendentes.
 
 ---
 
 ## 📚 Documentação
 
-Cada fase está documentada em detalhes na pasta `docs/`.
+A evolução do projeto está documentada por fase dentro da pasta `docs/`.
 
-### Links oficiais do Terraform:
+### Arquitetura
+
+* `docs/architecture/current-architecture.md`
+* `docs/architecture/evolution.md`
+
+### Fases
+
+* `docs/vpc/fase-1-vpc.md`
+* `docs/s3/fase-2-s3.md`
+* `docs/iam/fase-2-iam.md`
+* `docs/ec2/fase-3-ec2.md`
+* `docs/alb/fase-4-alb.md`
+* `docs/autoscaling/fase-5-autoscaling.md`
+* `docs/security-group/fase-5-security-group.md`
+
+---
+
+## 🧪 Como testar
+
+### Verificar outputs
+
+```bash
+terraform output
+```
+
+### Obter DNS do ALB
+
+```bash
+terraform output alb_dns_name
+```
+
+### Obter nome do bucket S3
+
+```bash
+terraform output bucket_name
+```
+
+---
+
+## 📖 Documentação oficial do Terraform
 
 * https://developer.hashicorp.com/terraform/docs
 * https://registry.terraform.io/providers/hashicorp/aws/latest/docs
 
 ---
 
-## 🔒 Boas práticas aplicadas
+## 🧠 Conceitos aplicados
 
-* Uso de módulos reutilizáveis
-* Separação de responsabilidades
-* Naming convention padronizada
-* `.gitignore` configurado corretamente
-* Uso de IAM ao invés de access keys
+* Infraestrutura como código (IaC)
+* Modularização com Terraform
+* Naming convention
+* VPC e separação de rede
+* IAM Roles e Policies
+* Integração entre serviços AWS
+* Application Load Balancer
+* Auto Scaling Group
+* Separação de responsabilidades por módulo
+
+---
+
+## 🗂️ Exemplos e legado
+
+A pasta `examples/` guarda implementações anteriores ou exemplos mantidos apenas para fins de estudo e documentação da evolução do projeto.
 
 ---
 
 ## 💼 Sobre o projeto
 
-Este projeto foi desenvolvido como parte de um plano de estudo prático para domínio de Terraform e AWS, com foco em cenários reais de mercado.
+Este projeto foi desenvolvido como parte de um plano de estudos prático para domínio de Terraform e AWS, com foco em cenários reais de mercado e construção de portfólio técnico no GitHub.
 
 ---
 
 ## 🚀 Próximos passos
 
-* Application Load Balancer (ALB)
-* Auto Scaling Group
-* Deploy automatizado
-* Integração com CI/CD
+* NAT Gateway
+* Instâncias em subnets privadas
+* Aplicação web de apresentação
+* Banco de dados RDS
+* Integração com Lambda
+* Evolução da arquitetura para maior segurança e desacoplamento
+
+---
+
+👨‍💻 Em constante evolução.
+

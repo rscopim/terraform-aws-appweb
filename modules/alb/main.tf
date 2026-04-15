@@ -108,22 +108,6 @@ resource "aws_lb_target_group" "app_tg" {
 }
 
 #############################################
-# ATTACHMENT DA EC2 AO TARGET GROUP
-# O que cria:
-# - Registro da instancia EC2 no target group
-# Para que serve:
-# - Fazer o ALB encaminhar trafego para a EC2 atual
-# Recurso ligado:
-# - aws_lb_target_group.app_tg
-# - instancia criada no modulo ec2
-#############################################
-resource "aws_lb_target_group_attachment" "ec2_attachment" {
-  target_group_arn = aws_lb_target_group.app_tg.arn
-  target_id        = var.instance_id
-  port             = 80
-}
-
-#############################################
 # LISTENER HTTP
 # O que cria:
 # - Listener do ALB

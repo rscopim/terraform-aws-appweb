@@ -23,11 +23,3 @@ variable "public_subnet_ids" {
   description = "Lista de subnets publicas"
   type        = list(string)
 }
-
-# ID da instância EC2
-# Para que serve:
-# - registrar a EC2 no target group
-variable "instance_id" {
-  description = "ID da instancia EC2"
-  type        = string
-}

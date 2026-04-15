@@ -1,4 +1,4 @@
-# Fase 3 — EC2 (Aplicação Web)
+# Fase 4 — EC2 (Aplicação Web)
 
 ## 🎯 Objetivo
 

@@ -83,9 +83,9 @@ resource "aws_launch_template" "app_lt" {
 #############################################
 resource "aws_autoscaling_group" "app_asg" {
   name                = "${var.project_name}-ASG"
-  desired_capacity    = 2
-  min_size            = 2
-  max_size            = 4
+  desired_capacity    = var.asg_desired_capacity
+  min_size            = var.asg_min_size
+  max_size            = var.asg_max_size
   vpc_zone_identifier = var.private_subnet_ids
   target_group_arns   = [var.target_group_arn]
   health_check_type   = "ELB"

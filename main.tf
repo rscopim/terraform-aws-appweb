@@ -1,14 +1,16 @@
 # PROVIDER
 provider "aws" {
-  region = "us-west-2"
+  region = var.aws_region
 }
-# VARIÁVEL GLOBAL
-variable "project_name" {
-  default = "Terraform-AppWeb"
-}
+
 # VPC
 module "vpc" {
-  source = "./modules/vpc"
+  source          = "./modules/vpc"
+  project_name    = var.project_name
+  vpc_cidr        = var.vpc_cidr
+  public_subnets  = var.public_subnets
+  private_subnets = var.private_subnets
+  azs             = var.azs
 }
 # S3
 module "s3" {
@@ -23,8 +25,7 @@ module "iam" {
 
 # MÓDULO SECURITY GROUP DA APP
 module "sg" {
-  source = "./modules/sg"
-
+  source                = "./modules/sg"
   project_name          = var.project_name
   vpc_id                = module.vpc.vpc_id
   alb_security_group_id = module.alb.alb_sg_id
@@ -32,8 +33,7 @@ module "sg" {
 
 # MÓDULO ALB
 module "alb" {
-  source = "./modules/alb"
-
+  source            = "./modules/alb"
   project_name      = var.project_name
   vpc_id            = module.vpc.vpc_id
   public_subnet_ids = module.vpc.public_subnets
@@ -48,5 +48,8 @@ module "autoscaling" {
   instance_profile_name = module.iam.instance_profile
   security_group_id     = module.sg.security_group_id
   bucket_name           = module.s3.bucket_name
-  instance_type         = "t3.micro"
+  instance_type         = var.instance_type
+  asg_min_size          = var.asg_min_size
+  asg_desired_capacity  = var.asg_desired_capacity
+  asg_max_size          = var.asg_max_size
 }

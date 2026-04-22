@@ -35,3 +35,18 @@ variable "instance_type" {
   type        = string
   default     = "t3.micro"
 }
+
+variable "asg_min_size" {
+  description = "Quantidade minima de instancias"
+  type        = number
+}
+
+variable "asg_desired_capacity" {
+  description = "Quantidade desejada de instancias"
+  type        = number
+}
+
+variable "asg_max_size" {
+  description = "Quantidade maxima de instancias"
+  type        = number
+}

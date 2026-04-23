@@ -1,10 +1,6 @@
-#############################################
 # DATA SOURCE - AMI AMAZON LINUX
-# O que faz:
-# - Busca a AMI mais recente
-# Para que serve:
-# - Evita hardcode
-#############################################
+# O que faz: Busca a AMI mais recente
+
 data "aws_ami" "amazon_linux" {
   most_recent = true
 
@@ -16,19 +12,9 @@ data "aws_ami" "amazon_linux" {
   }
 }
 
-#############################################
 # LAUNCH TEMPLATE
-# O que cria:
-# - Modelo de configuracao das instancias
-# Para que serve:
-# - Servir de base para o Auto Scaling Group
-# O que faz:
-# - Define AMI
-# - Define tipo da instancia
-# - Define security group
-# - Define IAM instance profile
-# - Define user_data
-#############################################
+# O que cria: Modelo de configuracao das instancias
+# Para que serve: Servir de base para o Auto Scaling Group
 resource "aws_launch_template" "app_lt" {
   name_prefix   = "${var.project_name}-LT-"
   image_id      = data.aws_ami.amazon_linux.id
@@ -69,18 +55,9 @@ resource "aws_launch_template" "app_lt" {
   }
 }
 
-#############################################
 # AUTO SCALING GROUP
-# O que cria:
-# - Grupo de escalabilidade automatica
-# Para que serve:
-# - Manter varias instancias disponiveis
-# - Integrar com o ALB
-# O que faz:
-# - Cria instancias em multiplas AZs
-# - Mantem capacidade minima
-# - Pode crescer e reduzir
-#############################################
+# O que cria: Grupo de escalabilidade automatica
+# Para que serve: Manter varias instancias disponiveis
 resource "aws_autoscaling_group" "app_asg" {
   name                = "${var.project_name}-ASG"
   desired_capacity    = var.asg_desired_capacity

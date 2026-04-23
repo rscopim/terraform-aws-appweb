@@ -1,6 +1,6 @@
-# Exemplo — EC2 (legado)
+# Exemplo — EC2 Standalone (legado)
 
-Este exemplo representa uma etapa anterior da arquitetura do projeto, quando a aplicação era executada em uma única instância EC2.
+Este exemplo representa a fase inicial da arquitetura do projeto, quando a aplicação era executada em uma única instância EC2.
 
 ## 🎯 Objetivo
 

@@ -49,4 +49,6 @@ module "autoscaling" {
   asg_min_size          = var.asg_min_size
   asg_desired_capacity  = var.asg_desired_capacity
   asg_max_size          = var.asg_max_size
+  linkedin_url          = var.linkedin_url
+  github_url            = var.github_url
 }

@@ -50,3 +50,13 @@ variable "asg_max_size" {
   description = "Quantidade maxima de instancias"
   type        = number
 }
+
+variable "linkedin_url" {
+  description = "URL do LinkedIn"
+  type        = string
+}
+
+variable "github_url" {
+  description = "URL do GitHub"
+  type        = string
+}

@@ -12,6 +12,20 @@ data "aws_ami" "amazon_linux" {
   }
 }
 
+# LOCALS
+# O que faz: Monta o conteúdo HTML a partir de um template
+# Para que serve: Separar o HTML do user_data
+locals {
+  html_content = templatefile("${path.module}/templates/index.html.tpl", {
+    project_name      = var.project_name
+    bucket_name       = var.bucket_name
+    instance_hostname = "$HOSTNAME"
+    linkedin_url      = var.linkedin_url
+    github_url        = var.github_url
+  })
+
+  css_content = templatefile("${path.module}/templates/style.css.tpl", {})
+}
 # LAUNCH TEMPLATE
 # O que cria: Modelo de configuracao das instancias
 # Para que serve: Servir de base para o Auto Scaling Group
@@ -26,25 +40,10 @@ resource "aws_launch_template" "app_lt" {
     name = var.instance_profile_name
   }
 
-  user_data = base64encode(<<-EOF
-              #!/bin/bash
-              yum update -y
-              yum install -y httpd aws-cli
-              systemctl start httpd
-              systemctl enable httpd
-
-              cat <<HTML > /var/www/html/index.html
-              <html>
-                <head><title>Terraform AppWeb</title></head>
-                <body>
-                  <h1>Terraform-AppWeb</h1>
-                  <p>Instancia criada via Auto Scaling Group.</p>
-                  <p>Bucket S3 vinculado: ${var.bucket_name}</p>
-                </body>
-              </html>
-              HTML
-              EOF
-  )
+    user_data = base64encode(templatefile("${path.module}/templates/user_data.sh.tpl", {
+    html_content = local.html_content
+    css_content  = local.css_content
+  }))
 
   tag_specifications {
     resource_type = "instance"

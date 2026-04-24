@@ -89,3 +89,16 @@ variable "tags" {
     Environment = "Lab"
   }
 }
+
+
+variable "linkedin_url" {
+  description = "URL do LinkedIn"
+  type        = string
+  default     = "https://www.linkedin.com/in/ricardosiminesscopim/"
+}
+
+variable "github_url" {
+  description = "URL do GitHub"
+  type        = string
+  default     = "https://github.com/rscopim"
+}

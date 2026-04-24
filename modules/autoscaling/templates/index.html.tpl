@@ -43,6 +43,11 @@
       </div>
 
       <div class="card">
+        <h2>Mensagem do S3</h2>
+        <p>S3_MESSAGE_PLACEHOLDER</p>
+      </div>
+
+      <div class="card">
         <h2>Serviços utilizados</h2>
         <ul>
           <li>Amazon VPC</li>

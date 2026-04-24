@@ -2,10 +2,13 @@
 provider "aws" {
   region = var.aws_region
 }
+
 # VPC
 module "vpc" {
   source          = "./modules/vpc"
-  project_name    = var.project_name
+  project_name      = local.project_display_name
+  project_name_safe = local.project_name_safe
+  common_tags       = local.common_tags
   vpc_cidr        = var.vpc_cidr
   public_subnets  = var.public_subnets
   private_subnets = var.private_subnets
@@ -13,8 +16,10 @@ module "vpc" {
 }
 # S3
 module "s3" {
-  source       = "./modules/s3"
-  project_name = var.project_name
+  source            = "./modules/s3"
+  project_name      = local.project_display_name
+  project_name_safe = local.project_name_safe
+  common_tags       = local.common_tags
 }
 # IAM
 module "iam" {
@@ -51,4 +56,18 @@ module "autoscaling" {
   asg_max_size          = var.asg_max_size
   linkedin_url          = var.linkedin_url
   github_url            = var.github_url
+}
+
+module "rds" {
+  source = "./modules/rds"
+
+  project_name          = local.project_display_name
+  project_name_safe     = local.project_name_safe
+  common_tags           = local.common_tags
+  subnet_ids            = module.vpc.private_subnets
+  vpc_id                = module.vpc.vpc_id
+  app_security_group_id = module.sg.security_group_id
+
+  db_username = var.db_username
+  db_password = var.db_password
 }

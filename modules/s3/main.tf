@@ -1,11 +1,12 @@
 # BUCKET S3
-
 resource "aws_s3_bucket" "bucket" {
-  bucket = "${lower(var.project_name)}-bucket-${random_id.suffix.hex}"
+  bucket = "${var.project_name_safe}-bucket-${random_id.suffix.hex}"
 
-  tags = {
+  force_destroy = true
+
+  tags = merge(var.common_tags, {
     Name = "${var.project_name}-S3"
-  }
+  })
 }
 
 # RANDOM PARA NOME ÚNICO

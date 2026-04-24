@@ -102,3 +102,11 @@ variable "github_url" {
   type        = string
   default     = "https://github.com/rscopim"
 }
+
+variable "db_username" {
+  default = "admin"
+}
+
+variable "db_password" {
+  default = "12345678"
+}

@@ -2,9 +2,9 @@
 resource "aws_vpc" "main" {
   cidr_block = var.vpc_cidr
 
-  tags = {
+  tags = merge(var.common_tags, {
     Name = "${var.project_name}-VPC"
-  }
+  })
 }
 # INTERNET GATEWAY
 resource "aws_internet_gateway" "igw" {

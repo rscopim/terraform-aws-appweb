@@ -4,8 +4,6 @@
 
 Criar um banco de dados relacional utilizando Amazon RDS, implantado em subnets privadas e acessível apenas pela aplicação.
 
----
-
 ## 🏗️ O que foi criado
 
 * DB Subnet Group
@@ -13,40 +11,39 @@ Criar um banco de dados relacional utilizando Amazon RDS, implantado em subnets 
 * Instância RDS (MySQL)
 * Integração com a aplicação via Security Group
 
----
-
 ## 🧠 Conceitos importantes
 
-* **RDS (Relational Database Service)**: serviço gerenciado de banco de dados da AWS
-* **DB Subnet Group**: define em quais subnets o RDS pode ser criado
-* **Subnet privada**: sem acesso direto à internet
-* **Security Group**: controla quem pode acessar o banco
-* **Porta 3306**: padrão do MySQL
-
----
+* **Amazon RDS (Relational Database Service)**: serviço gerenciado de banco de dados
+* **DB Subnet Group**: define em quais subnets o banco será provisionado
+* **Subnet privada**: não possui acesso direto à internet
+* **Security Group**: controla quais recursos podem acessar o banco
+* **Porta 3306**: porta padrão utilizada pelo MySQL
 
 ## ⚙️ Como funciona
 
-O banco de dados é criado dentro de subnets privadas da VPC, sem acesso público.
+O banco de dados é provisionado dentro de subnets privadas da VPC, sem acesso público.
 
-O acesso ao RDS é permitido apenas para instâncias da aplicação (Auto Scaling Group), através do Security Group da aplicação.
+Um DB Subnet Group define as subnets onde o RDS pode ser criado.
+
+O acesso ao banco é permitido apenas para instâncias da aplicação (Auto Scaling Group), por meio do Security Group da aplicação.
 
 Fluxo de acesso:
 
-```text
-EC2 (ASG) → Security Group → RDS (MySQL)
+```text id="9o6c6g"
+EC2 (Auto Scaling Group)
+   ↓
+Security Group
+   ↓
+Amazon RDS (MySQL)
 ```
-
----
 
 ## 🔐 Segurança aplicada
 
-* `publicly_accessible = false` → RDS não é exposto à internet
+* `publicly_accessible = false` → RDS não exposto à internet
 * Security Group permite acesso apenas da aplicação
 * Banco isolado em subnets privadas
-* Sem uso de credenciais públicas expostas na aplicação
-
----
+* Nenhuma credencial sensível exposta na aplicação
+* Separação entre camada de aplicação e banco de dados
 
 ## 📚 Documentação oficial
 
@@ -54,45 +51,40 @@ EC2 (ASG) → Security Group → RDS (MySQL)
 * https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_subnet_group
 * https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group
 
----
-
 ## 🧪 Como testar
 
-1. Rodar o Terraform:
+* Executar:
 
-```bash
+```bash id="u7k3kn"
 terraform apply
 ```
 
-2. Validar no console AWS:
+* Validar no console AWS:
 
-* RDS criado com sucesso
-* Status disponível (`Available`)
-* Sem acesso público
-* Subnets privadas configuradas
+  * Instância RDS criada com sucesso
+  * Status `Available`
+  * Sem acesso público
+  * Subnets privadas corretamente associadas
 
-3. (Opcional) Testar conexão via EC2:
+* (Opcional) Testar conexão via EC2:
 
-```bash
+```bash id="m0np2s"
 mysql -h <endpoint-rds> -u admin -p
 ```
 
----
-
 ## 📌 Observações importantes
 
-* O banco pode levar alguns minutos para ficar disponível após criação
-* A senha está definida diretamente no código (será melhorado em fases futuras)
-* O acesso ao banco é restrito à aplicação, aumentando a segurança da arquitetura
-
----
+* A criação do RDS pode levar alguns minutos
+* O acesso ao banco é restrito à aplicação, aumentando a segurança
+* Nesta fase, as credenciais ainda estão definidas diretamente no código (melhoria futura)
+* O banco não é acessível diretamente da internet
 
 ## 🚀 Evolução futura
 
-* Uso de AWS Secrets Manager para armazenar credenciais
-* Conexão da aplicação diretamente com o banco
-* Criação de tabelas e persistência de dados reais
-* Backup automatizado do RDS
-* Alta disponibilidade (Multi-AZ)
+* Utilizar AWS Secrets Manager para armazenamento seguro de credenciais
+* Conectar a aplicação diretamente ao banco de dados
+* Criar estrutura de tabelas e persistência de dados
+* Implementar backups automáticos
+* Configurar alta disponibilidade (Multi-AZ)
 
 ---

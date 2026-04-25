@@ -1,24 +1,30 @@
 # VARIÁVEIS DO MÓDULO ALB
-
 # Nome do projeto
-# Para que serve:
-# - padronizar nomes dos recursos
+# Para que serve: padronizar nomes dos recursos
 variable "project_name" {
-  description = "Nome do projeto"
+  description = "Nome visual do projeto"
   type        = string
 }
 
+variable "project_name_safe" {
+  description = "Nome tecnico do projeto"
+  type        = string
+}
+
+variable "common_tags" {
+  description = "Tags padrao"
+  type        = map(string)
+}
+
 # ID da VPC
-# Para que serve:
-# - criar recursos de rede dentro da VPC correta
+# Para que serve: criar recursos de rede dentro da VPC correta
 variable "vpc_id" {
   description = "ID da VPC"
   type        = string
 }
 
 # Lista de subnets públicas
-# Para que serve:
-# - colocar o ALB em múltiplas AZs
+# Para que serve: colocar o ALB em múltiplas AZs
 variable "public_subnet_ids" {
   description = "Lista de subnets publicas"
   type        = list(string)

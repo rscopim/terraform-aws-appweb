@@ -1,35 +1,18 @@
-#############################################
 # SECURITY GROUP DO ALB
-# O que cria:
-# - Firewall do Load Balancer
-# Para que serve:
-# - Permitir acesso HTTP vindo da internet
-# Recurso ligado:
-# - aws_lb.app_alb
-#############################################
 resource "aws_security_group" "alb_sg" {
   name        = "${var.project_name}-ALB-SG"
   description = "Security Group do Application Load Balancer"
   vpc_id      = var.vpc_id
 
-  #############################################
   # REGRA DE ENTRADA HTTP
-  # O que faz:
-  # - Libera acesso na porta 80
-  #############################################
-  ingress {
+    ingress {
     description = "HTTP inbound"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
-  #############################################
-  # REGRA DE SAÍDA
-  # O que faz:
-  # - Permite trafego de saída
-  #############################################
+# REGRA DE SAÍDA
   egress {
     description = "All outbound traffic"
     from_port   = 0
@@ -43,19 +26,7 @@ resource "aws_security_group" "alb_sg" {
   }
 }
 
-#############################################
 # APPLICATION LOAD BALANCER
-# O que cria:
-# - Load Balancer publico
-# Para que serve:
-# - Receber acessos da internet e distribuir para targets
-# O que faz:
-# - Usa duas subnets publicas
-# - Fica acessivel publicamente
-# Recurso ligado:
-# - Security Group
-# - Target Group
-#############################################
 resource "aws_lb" "app_alb" {
   name               = "${var.project_name}-ALB"
   internal           = false
@@ -63,12 +34,11 @@ resource "aws_lb" "app_alb" {
   security_groups    = [aws_security_group.alb_sg.id]
   subnets            = var.public_subnet_ids
 
-  tags = {
+  tags = merge(var.common_tags, {
     Name = "${var.project_name}-ALB"
-  }
+  })
 }
 
-#############################################
 # TARGET GROUP
 # O que cria:
 # - Grupo de destinos do ALB
@@ -86,7 +56,10 @@ resource "aws_lb_target_group" "app_tg" {
   port     = 80
   protocol = "HTTP"
   vpc_id   = var.vpc_id
-
+  tags = merge(var.common_tags, {
+    Name = "${var.project_name}-TG"
+  })
+  
   #############################################
   # HEALTH CHECK
   # O que faz:
@@ -100,10 +73,6 @@ resource "aws_lb_target_group" "app_tg" {
     timeout             = 5
     healthy_threshold   = 2
     unhealthy_threshold = 2
-  }
-
-  tags = {
-    Name = "${var.project_name}-TG"
   }
 }
 

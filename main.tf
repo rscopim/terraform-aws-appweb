@@ -24,27 +24,34 @@ module "s3" {
 # IAM
 module "iam" {
   source       = "./modules/iam"
-  project_name = var.project_name
+  project_name      = local.project_display_name
+  project_name_safe = local.project_name_safe
+  common_tags       = local.common_tags
 }
 # MÓDULO ALB
 module "alb" {
   source            = "./modules/alb"
-  project_name      = var.project_name
+  project_name      = local.project_display_name
+  project_name_safe = local.project_name_safe
+  common_tags       = local.common_tags
   vpc_id            = module.vpc.vpc_id
   public_subnet_ids = module.vpc.public_subnets
 }
 # MÓDULO SECURITY GROUP DA APP
 module "sg" {
   source                = "./modules/security-group"
-  project_name          = var.project_name
+  project_name      = local.project_display_name
+  project_name_safe = local.project_name_safe
+  common_tags       = local.common_tags
   vpc_id                = module.vpc.vpc_id
   alb_security_group_id = module.alb.alb_sg_id
 }
 # MÓDULO AUTOSCALING
 module "autoscaling" {
   source = "./modules/autoscaling"
-
-  project_name          = var.project_name
+  project_name      = local.project_display_name
+  project_name_safe = local.project_name_safe
+  common_tags       = local.common_tags
   private_subnet_ids    = module.vpc.private_subnets
   target_group_arn      = module.alb.target_group_arn
   instance_profile_name = module.iam.instance_profile
@@ -60,14 +67,12 @@ module "autoscaling" {
 
 module "rds" {
   source = "./modules/rds"
-
   project_name          = local.project_display_name
   project_name_safe     = local.project_name_safe
   common_tags           = local.common_tags
   subnet_ids            = module.vpc.private_subnets
   vpc_id                = module.vpc.vpc_id
   app_security_group_id = module.sg.security_group_id
-
   db_username = var.db_username
   db_password = var.db_password
 }

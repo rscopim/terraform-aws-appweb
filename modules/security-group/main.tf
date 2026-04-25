@@ -52,7 +52,7 @@ resource "aws_security_group" "app_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = {
-    Name = "${var.project_name}-APP-SG"
-  }
+  tags = merge(var.common_tags, {
+  Name = "${var.project_name}-SG"
+})
 }

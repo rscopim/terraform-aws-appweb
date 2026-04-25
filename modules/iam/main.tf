@@ -1,6 +1,9 @@
 # IAM ROLE PARA EC2
 resource "aws_iam_role" "ec2_role" {
   name = "${var.project_name}-EC2-Role"
+  tags = merge(var.common_tags, {
+    Name = "${var.project_name}-S3"
+  })
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -17,6 +20,9 @@ resource "aws_iam_role" "ec2_role" {
 # POLICY PARA S3
 resource "aws_iam_policy" "s3_policy" {
   name = "${var.project_name}-S3-Policy"
+  tags = merge(var.common_tags, {
+    Name = "${var.project_name}-S3"
+  })
 
   policy = jsonencode({
     Version = "2012-10-17",

@@ -164,7 +164,7 @@ O projeto permite destruir apenas componentes com custo:
 ```bash
 terraform destroy -target="module.autoscaling"
 terraform destroy -target="module.alb"
-terraform destroy -target="module.nat"
+terraform destroy -target="module.vpc.aws_nat_gateway.nat" -target="module.vpc.aws_eip.nat"
 terraform destroy -target="module.rds"
 ```
 

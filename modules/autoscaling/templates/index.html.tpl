@@ -8,37 +8,51 @@
 </head>
 <body>
   <main class="page">
+
     <section class="hero">
-      <div class="badge">AWS + Terraform</div>
+      <span class="badge">AWS + Terraform</span>
 
       <h1>${project_name}</h1>
 
       <p class="subtitle">
-        Arquitetura web criada com Terraform na AWS, utilizando VPC, ALB,
-        Auto Scaling, IAM, S3 e NAT Gateway.
+        Arquitetura web provisionada com Terraform na AWS, utilizando rede multi-AZ,
+        Load Balancer, Auto Scaling, S3, IAM, NAT Gateway e RDS.
       </p>
 
       <div class="actions">
-        <a href="${linkedin_url}" target="_blank">LinkedIn</a>
-        <a href="${github_url}" target="_blank">GitHub</a>
+        <a class="btn primary" href="${linkedin_url}" target="_blank">Ver LinkedIn</a>
+        <a class="btn secondary" href="${github_url}" target="_blank">Ver GitHub</a>
+      </div>
+    </section>
+
+    <section class="status-bar">
+      <div>
+        <span>Status</span>
+        <strong>Online</strong>
+      </div>
+      <div>
+        <span>Ambiente</span>
+        <strong>AWS Lab</strong>
+      </div>
+      <div>
+        <span>Deploy</span>
+        <strong>DEPLOY_TIME_PLACEHOLDER</strong>
       </div>
     </section>
 
     <section class="grid">
       <div class="card">
         <h2>Arquitetura</h2>
-        <p>Internet → ALB → Auto Scaling Group → EC2 privada → S3</p>
+        <p>Internet → ALB → Auto Scaling → EC2 privada → S3 / RDS</p>
       </div>
 
       <div class="card">
-        <h2>Instância</h2>
-        <p>Instância ativa:</p>
-        <p>${instance_hostname}</p>
+        <h2>Instância ativa</h2>
+        <p>INSTANCE_HOSTNAME_PLACEHOLDER</p>
       </div>
 
       <div class="card">
         <h2>Bucket S3</h2>
-        <p>Bucket de armazenamento</p>
         <p>${bucket_name}</p>
       </div>
 
@@ -47,24 +61,26 @@
         <p>S3_MESSAGE_PLACEHOLDER</p>
       </div>
 
-      <div class="card">
+      <div class="card large">
         <h2>Serviços utilizados</h2>
-        <ul>
-          <li>Amazon VPC</li>
-          <li>Application Load Balancer</li>
-          <li>Auto Scaling Group</li>
-          <li>Amazon EC2</li>
-          <li>Amazon S3</li>
-          <li>AWS IAM</li>
-          <li>NAT Gateway</li>
-        </ul>
+        <div class="services">
+          <span>Amazon VPC</span>
+          <span>ALB</span>
+          <span>Auto Scaling</span>
+          <span>Amazon EC2</span>
+          <span>Amazon S3</span>
+          <span>AWS IAM</span>
+          <span>NAT Gateway</span>
+          <span>Amazon RDS</span>
+        </div>
+      </div>
+
+      <div class="card large diagram">
+        <h2>Diagrama da arquitetura</h2>
+        <p>Espaço reservado para adicionar futuramente o diagrama visual da solução.</p>
       </div>
     </section>
 
-    <section class="diagram-placeholder">
-      <h2>Diagrama da arquitetura</h2>
-      <p>Espaço reservado para adicionar futuramente o diagrama visual da solução.</p>
-    </section>
   </main>
 </body>
 </html>

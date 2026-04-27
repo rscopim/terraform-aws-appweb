@@ -40,7 +40,7 @@ resource "aws_launch_template" "app_lt" {
     name = var.instance_profile_name
   }
 
-    user_data = base64encode(templatefile("${path.module}/templates/user_data.sh.tpl", {
+  user_data = base64encode(templatefile("${path.module}/templates/user_data.sh.tpl", {
     html_content = local.html_content
     css_content  = local.css_content
     bucket_name  = var.bucket_name

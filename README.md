@@ -4,6 +4,8 @@ Projeto de infraestrutura como código (IaC) utilizando Terraform para provision
 
 Este projeto demonstra, de ponta a ponta, a criação de uma aplicação web altamente disponível, com balanceamento de carga, auto scaling, banco de dados e integração com serviços gerenciados.
 
+Esse projeto está em constante evolução.
+
 ---
 
 ## 🧠 Visão geral

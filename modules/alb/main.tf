@@ -5,14 +5,14 @@ resource "aws_security_group" "alb_sg" {
   vpc_id      = var.vpc_id
 
   # REGRA DE ENTRADA HTTP
-    ingress {
+  ingress {
     description = "HTTP inbound"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-# REGRA DE SAÍDA
+  # REGRA DE SAÍDA
   egress {
     description = "All outbound traffic"
     from_port   = 0
@@ -59,7 +59,7 @@ resource "aws_lb_target_group" "app_tg" {
   tags = merge(var.common_tags, {
     Name = "${var.project_name}-TG"
   })
-  
+
   #############################################
   # HEALTH CHECK
   # O que faz:

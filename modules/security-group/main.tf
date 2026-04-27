@@ -53,6 +53,6 @@ resource "aws_security_group" "app_sg" {
   }
 
   tags = merge(var.common_tags, {
-  Name = "${var.project_name}-SG"
-})
+    Name = "${var.project_name}-SG"
+  })
 }

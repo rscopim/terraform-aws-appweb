@@ -14,6 +14,20 @@ module "vpc" {
   private_subnets   = var.private_subnets
   azs               = var.azs
 }
+
+# NAT
+module "nat" {
+  source = "./modules/nat"
+
+  project_name      = local.project_display_name
+  project_name_safe = local.project_name_safe
+  common_tags       = local.common_tags
+
+  public_subnet_id       = module.vpc.public_subnets[0]
+  private_route_table_id = module.vpc.private_route_table_id
+  internet_gateway_id    = module.vpc.internet_gateway_id
+}
+
 # S3
 module "s3" {
   source            = "./modules/s3"

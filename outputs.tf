@@ -4,6 +4,16 @@ output "vpc_id" {
   value       = module.vpc.vpc_id
 }
 
+output "nat_gateway_id" {
+  description = "ID do NAT Gateway"
+  value       = module.nat.nat_gateway_id
+}
+
+output "nat_eip" {
+  description = "Elastic IP do NAT Gateway"
+  value       = module.nat.nat_eip
+}
+
 output "public_subnets" {
   description = "Lista de subnets publicas"
   value       = module.vpc.public_subnets

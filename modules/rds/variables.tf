@@ -26,9 +26,6 @@ variable "app_security_group_id" {
 }
 
 variable "db_username" {
-  type = string
-}
-
-variable "db_password" {
-  type = string
+  description = "Usuario administrador do banco"
+  type        = string
 }

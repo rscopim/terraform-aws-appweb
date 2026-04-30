@@ -70,3 +70,8 @@ variable "github_url" {
   description = "URL do GitHub"
   type        = string
 }
+
+variable "rds_secret_arn" {
+  description = "ARN do secret do RDS no Secrets Manager"
+  type        = string
+}

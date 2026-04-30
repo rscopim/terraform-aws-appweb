@@ -69,12 +69,6 @@ variable "github_url" {
 }
 
 variable "db_username" {
-  description = "Usuario do banco"
+  description = "Usuario administrador do banco"
   type        = string
-}
-
-variable "db_password" {
-  description = "Senha do banco"
-  type        = string
-  sensitive   = true
 }

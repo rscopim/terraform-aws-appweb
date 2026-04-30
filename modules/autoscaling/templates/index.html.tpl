@@ -61,6 +61,12 @@
         <p>S3_MESSAGE_PLACEHOLDER</p>
       </div>
 
+      <div class="card">
+        <h2>Secrets Manager</h2>
+        <p>Usuário RDS: <strong>RDS_USER_PLACEHOLDER</strong></p>
+        <p>Status: SECRET_STATUS_PLACEHOLDER</p>
+      </div>
+
       <div class="card large">
         <h2>Serviços utilizados</h2>
         <div class="services">

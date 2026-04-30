@@ -22,6 +22,8 @@ locals {
     instance_hostname = "$HOSTNAME"
     linkedin_url      = var.linkedin_url
     github_url        = var.github_url
+    rds_user          = "RDS_USER_PLACEHOLDER"
+    secret_status     = "SECRET_STATUS_PLACEHOLDER"
   })
 
   css_content = templatefile("${path.module}/templates/style.css.tpl", {})
@@ -41,9 +43,10 @@ resource "aws_launch_template" "app_lt" {
   }
 
   user_data = base64encode(templatefile("${path.module}/templates/user_data.sh.tpl", {
-    html_content = local.html_content
-    css_content  = local.css_content
-    bucket_name  = var.bucket_name
+    html_content   = local.html_content
+    css_content    = local.css_content
+    bucket_name    = var.bucket_name
+    rds_secret_arn = var.rds_secret_arn
   }))
 
   tag_specifications {

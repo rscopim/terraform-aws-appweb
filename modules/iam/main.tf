@@ -19,18 +19,56 @@ resource "aws_iam_role" "ec2_role" {
 
 # POLICY PARA S3
 resource "aws_iam_policy" "s3_policy" {
-  name = "${var.project_name}-S3-Policy"
-  tags = merge(var.common_tags, {
-    Name = "${var.project_name}-S3"
-  })
+  name = "${var.project_name_safe}-s3-policy"
 
   policy = jsonencode({
     Version = "2012-10-17",
-    Statement = [{
-      Action   = ["s3:*"],
-      Effect   = "Allow",
-      Resource = "*"
-    }]
+    Statement = [
+      {
+        Sid    = "AllowListBucket"
+        Effect = "Allow"
+        Action = [
+          "s3:ListBucket"
+        ]
+        Resource = "arn:aws:s3:::${var.bucket_name}"
+      },
+      {
+        Sid    = "AllowReadWriteObjects"
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject"
+        ]
+        Resource = "arn:aws:s3:::${var.bucket_name}/*"
+      }
+    ]
+  })
+
+  tags = merge(var.common_tags, {
+    Name = "${var.project_name}-S3-Policy"
+  })
+}
+
+# POLICY PARA SECRETS MANAGER
+resource "aws_iam_policy" "secrets_policy" {
+  name = "${var.project_name_safe}-secrets-policy"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Sid    = "AllowReadRdsSecret"
+        Effect = "Allow"
+        Action = [
+          "secretsmanager:GetSecretValue"
+        ]
+        Resource = var.rds_secret_arn
+      }
+    ]
+  })
+
+  tags = merge(var.common_tags, {
+    Name = "${var.project_name}-Secrets-Policy"
   })
 }
 
@@ -39,6 +77,11 @@ resource "aws_iam_policy" "s3_policy" {
 resource "aws_iam_role_policy_attachment" "attach" {
   role       = aws_iam_role.ec2_role.name
   policy_arn = aws_iam_policy.s3_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "secrets_attach" {
+  role       = aws_iam_role.ec2_role.name
+  policy_arn = aws_iam_policy.secrets_policy.arn
 }
 
 # INSTANCE PROFILE (EC2 usa isso)

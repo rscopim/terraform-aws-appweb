@@ -41,6 +41,8 @@ module "iam" {
   project_name      = local.project_display_name
   project_name_safe = local.project_name_safe
   common_tags       = local.common_tags
+  bucket_name       = module.s3.bucket_name
+  rds_secret_arn    = module.rds.rds_master_user_secret_arn
 }
 # MÓDULO ALB
 module "alb" {
@@ -70,6 +72,7 @@ module "autoscaling" {
   target_group_arn      = module.alb.target_group_arn
   instance_profile_name = module.iam.instance_profile
   security_group_id     = module.sg.security_group_id
+  rds_secret_arn        = module.rds.rds_master_user_secret_arn
   bucket_name           = module.s3.bucket_name
   instance_type         = var.instance_type
   asg_min_size          = var.asg_min_size
@@ -88,5 +91,4 @@ module "rds" {
   vpc_id                = module.vpc.vpc_id
   app_security_group_id = module.sg.security_group_id
   db_username           = var.db_username
-  db_password           = var.db_password
 }

@@ -43,3 +43,8 @@ output "launch_template_id" {
   description = "ID do Launch Template"
   value       = module.autoscaling.launch_template_id
 }
+
+output "rds_master_user_secret_arn" {
+  description = "ARN do secret do RDS no Secrets Manager"
+  value       = module.rds.rds_master_user_secret_arn
+}

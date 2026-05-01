@@ -24,6 +24,7 @@ RDS_SECRET_ARN="${rds_secret_arn}"
 
 SECRET_JSON=$(aws secretsmanager get-secret-value \
   --secret-id "$RDS_SECRET_ARN" \
+  --region us-west-2 \
   --query SecretString \
   --output text 2>/tmp/secrets-error.log)
 

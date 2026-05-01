@@ -1,3 +1,5 @@
+data "aws_caller_identity" "current" {}
+
 # IAM ROLE PARA EC2
 resource "aws_iam_role" "ec2_role" {
   name = "${var.project_name}-EC2-Role"
@@ -62,7 +64,7 @@ resource "aws_iam_policy" "secrets_policy" {
         Action = [
           "secretsmanager:GetSecretValue"
         ]
-        Resource = var.rds_secret_arn
+        Resource = "arn:aws:secretsmanager:us-west-2:${data.aws_caller_identity.current.account_id}:secret:rds!db-*"
       }
     ]
   })
@@ -89,4 +91,9 @@ resource "aws_iam_role_policy_attachment" "secrets_attach" {
 resource "aws_iam_instance_profile" "profile" {
   name = "${var.project_name}-InstanceProfile"
   role = aws_iam_role.ec2_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "ssm_attach" {
+  role       = aws_iam_role.ec2_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }

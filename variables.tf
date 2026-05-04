@@ -52,6 +52,12 @@ variable "asg_max_size" {
   type        = number
 }
 
+# CloudWatch
+variable "log_retention_days" {
+  description = "Quantidade de dias para reter logs no CloudWatch"
+  type        = number
+}
+
 # TAGS
 variable "tags" {
   description = "Tags padrao dos recursos"

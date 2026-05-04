@@ -74,6 +74,12 @@ resource "aws_iam_policy" "secrets_policy" {
   })
 }
 
+# POLICY PARA CLOUDWATCH
+resource "aws_iam_role_policy_attachment" "cloudwatch_attach" {
+  role       = aws_iam_role.ec2_role.name
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+}
+
 # ANEXAR POLICY NA ROLE
 
 resource "aws_iam_role_policy_attachment" "attach" {

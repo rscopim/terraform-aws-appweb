@@ -75,3 +75,8 @@ variable "rds_secret_arn" {
   description = "ARN do secret do RDS no Secrets Manager"
   type        = string
 }
+
+variable "cloudwatch_log_group_name" {
+  description = "Nome do Log Group do CloudWatch"
+  type        = string
+}

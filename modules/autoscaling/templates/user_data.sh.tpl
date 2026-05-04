@@ -2,6 +2,7 @@
 
 yum update -y
 yum install -y httpd aws-cli
+yum install -y amazon-cloudwatch-agent
 
 systemctl start httpd
 systemctl enable httpd
@@ -49,3 +50,37 @@ sed -i "s|SECRET_STATUS_PLACEHOLDER|$SECRET_STATUS|g" /var/www/html/index.html
 cat <<EOF_CSS > /var/www/html/style.css
 ${css_content}
 EOF_CSS
+
+cat <<EOF_CW > /opt/aws/amazon-cloudwatch-agent/bin/config.json
+{
+  "logs": {
+    "logs_collected": {
+      "files": {
+        "collect_list": [
+          {
+            "file_path": "/var/log/messages",
+            "log_group_name": "${cloudwatch_log_group_name}",
+            "log_stream_name": "{instance_id}/messages"
+          },
+          {
+            "file_path": "/var/log/httpd/access_log",
+            "log_group_name": "${cloudwatch_log_group_name}",
+            "log_stream_name": "{instance_id}/httpd-access"
+          },
+          {
+            "file_path": "/var/log/httpd/error_log",
+            "log_group_name": "${cloudwatch_log_group_name}",
+            "log_stream_name": "{instance_id}/httpd-error"
+          }
+        ]
+      }
+    }
+  }
+}
+EOF_CW
+
+/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
+  -a fetch-config \
+  -m ec2 \
+  -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json \
+  -s

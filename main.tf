@@ -103,7 +103,7 @@ module "autoscaling" {
   security_group_id         = module.sg.security_group_id
   rds_secret_arn            = module.rds.rds_master_user_secret_arn
   bucket_name               = module.s3.bucket_name
-  cloudwatch_log_group_name = module.cloudwatch.log_group_name
+  cloudwatch_log_group_name = "/${local.project_name_safe}/app"
 
   instance_type        = var.instance_type
   asg_min_size         = var.asg_min_size
@@ -122,4 +122,23 @@ module "cloudwatch" {
   common_tags       = local.common_tags
 
   log_retention_days = var.log_retention_days
+
+  autoscaling_group_name    = module.autoscaling.autoscaling_group_name
+  alb_arn_suffix            = module.alb.alb_arn_suffix
+  target_group_arn_suffix   = module.alb.target_group_arn_suffix
+  cpu_alarm_threshold       = var.cpu_alarm_threshold
+  unhealthy_hosts_threshold = var.unhealthy_hosts_threshold
+  alb_5xx_threshold         = var.alb_5xx_threshold
+  alarm_actions             = [module.sns.topic_arn]
+  ok_actions                = [module.sns.topic_arn]
+}
+
+module "sns" {
+  source = "./modules/sns"
+
+  project_name      = local.project_display_name
+  project_name_safe = local.project_name_safe
+  common_tags       = local.common_tags
+
+  alert_email = var.alert_email
 }

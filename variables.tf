@@ -58,6 +58,21 @@ variable "log_retention_days" {
   type        = number
 }
 
+variable "cpu_alarm_threshold" {
+  description = "Percentual de CPU para disparar alarme"
+  type        = number
+}
+
+variable "unhealthy_hosts_threshold" {
+  description = "Quantidade de targets nao saudaveis para disparar alarme"
+  type        = number
+}
+
+variable "alb_5xx_threshold" {
+  description = "Quantidade de erros 5XX do ALB para disparar alarme"
+  type        = number
+}
+
 # TAGS
 variable "tags" {
   description = "Tags padrao dos recursos"
@@ -76,5 +91,10 @@ variable "github_url" {
 
 variable "db_username" {
   description = "Usuario administrador do banco"
+  type        = string
+}
+
+variable "alert_email" {
+  description = "E-mail para receber alertas do SNS"
   type        = string
 }
